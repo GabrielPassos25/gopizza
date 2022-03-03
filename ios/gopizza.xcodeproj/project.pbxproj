@@ -14,6 +14,7 @@
 		96905EF65AED1B983A6B3ABC /* libPods-gopizza.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 58EEBF8E8E6FB1BC6CAF49B5 /* libPods-gopizza.a */; };
 		B18059E884C0ABDD17F3DC3D /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
+		C930B220BB0545108913C403 /* noop-file.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5B3E0ACC3E430899028E24 /* noop-file.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +32,8 @@
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-gopizza/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
+		6B5B3E0ACC3E430899028E24 /* noop-file.swift */ = {isa = PBXFileReference; name = "noop-file.swift"; path = "gopizza/noop-file.swift"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.swift; explicitFileType = undefined; includeInIndex = 0; };
+		FF08DF786D9A4A5CAA7D3DFB /* gopizza-Bridging-Header.h */ = {isa = PBXFileReference; name = "gopizza-Bridging-Header.h"; path = "gopizza/gopizza-Bridging-Header.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +59,8 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB71A68108700A75B9A /* main.m */,
 				AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */,
+				6B5B3E0ACC3E430899028E24 /* noop-file.swift */,
+				FF08DF786D9A4A5CAA7D3DFB /* gopizza-Bridging-Header.h */,
 			);
 			name = gopizza;
 			sourceTree = "<group>";
@@ -196,6 +201,7 @@
 				BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
+				CA4C8A421CFB494882255B2D /* gopizza-Bridging-Header.h in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -287,6 +293,7 @@
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				B18059E884C0ABDD17F3DC3D /* ExpoModulesProvider.swift in Sources */,
+				C930B220BB0545108913C403 /* noop-file.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -313,11 +320,14 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.name.gopizza;
-				PRODUCT_NAME = gopizza;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.pabrielgassos.gopizza";
+				PRODUCT_NAME = "gopizza";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
+				TARGETED_DEVICE_FAMILY = "1";
+				SWIFT_OBJC_BRIDGING_HEADER = gopizza/gopizza-Bridging-Header.h;
+				CODE_SIGN_ENTITLEMENTS = "gopizza/gopizza.entitlements";
 			};
 			name = Debug;
 		};
@@ -336,10 +346,13 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.name.gopizza;
-				PRODUCT_NAME = gopizza;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.pabrielgassos.gopizza";
+				PRODUCT_NAME = "gopizza";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
+				TARGETED_DEVICE_FAMILY = "1";
+				SWIFT_OBJC_BRIDGING_HEADER = gopizza/gopizza-Bridging-Header.h;
+				CODE_SIGN_ENTITLEMENTS = "gopizza/gopizza.entitlements";
 			};
 			name = Release;
 		};
@@ -396,6 +409,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				CODE_SIGN_ENTITLEMENTS = "gopizza/gopizza.entitlements";
 			};
 			name = Debug;
 		};
@@ -445,6 +459,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
+				CODE_SIGN_ENTITLEMENTS = "gopizza/gopizza.entitlements";
 			};
 			name = Release;
 		};

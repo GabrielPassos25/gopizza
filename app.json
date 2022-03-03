@@ -5,7 +5,18 @@
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"
-    ]
+    ],
+    "android": {
+      "package": "com.pabrielgassos.gopizza"
+    },
+    "ios": {
+      "bundleIdentifier": "com.pabrielgassos.gopizza"
+    }
   },
-  "name": "gopizza"
+  "name": "gopizza",
+  "plugins": [
+    "@react-native-firebase/app",
+    "@react-native-firebase/perf",
+    "@react-native-firebase/crashlytics"
+  ]
 }

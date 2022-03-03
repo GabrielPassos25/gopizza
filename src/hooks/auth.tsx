@@ -1,7 +1,9 @@
 // Libs
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import auth from '@react-native-firebase/auth';
 import { Alert } from 'react-native';
+
+// Constants
+import auth from '../config/firebase';
 
 // Types
 type AuthContextData = {
@@ -21,7 +23,7 @@ function AuthProvider({ children }: AuthProviderProps) {
             return Alert.alert('Login', 'Informe o e-mail e a senha.');
         }
         setIsLogging(true);
-        auth().signInWithEmailAndPassword(email, password)
+        auth.signInWithEmailAndPassword(email, password)
             .then(account => { console.log(account) })
             .catch(error => {
                 const { code } = error;
