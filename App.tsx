@@ -7,6 +7,7 @@ import { StatusBar } from 'expo-status-bar';
 
 // Components
 import { Home } from './src/screens/Home';
+import { Product } from './src/screens/Product';
 import { AuthProvider } from './src/hooks/auth';
 
 // Styles
