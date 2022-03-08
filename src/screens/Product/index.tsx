@@ -1,7 +1,10 @@
 // Libs
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Platform, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import { ProductNavigationProps } from '../../@types/navigation';
+import { useRoute, useNavigation } from '@react-navigation/native';
+import { View } from 'react-native';
 
 // Components
 import { ButtonBack } from '../../components/ButtonBack';
@@ -9,13 +12,25 @@ import { Photo } from '../../components/Photo';
 import { InputPrice } from '../../components/InputPrice';
 import { Input } from '../../components/Input';
 import { Button } from '../../components/Button';
+import { ProductProps } from '../../components/ProductCard';
 import firebase from '../../config/firebase';
 
 // Styles
 import { Container, Header, Title, DeleteLabel, PickImageButton, Upload, Form, InputGroup, InputGroupHeader, Label, MaxCharacters } from './styles';
 
+// Types
+type PizzaResponse = ProductProps & {
+    photo_path: string;
+    priceSizes: {
+        p: string;
+        m: string;
+        g: string;
+    };
+}
+
 // Renderer
 export function Product() {
+    const [photo_path, setPhotoPath] = useState('');
     const [image, setImage] = useState('');
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
@@ -23,6 +38,9 @@ export function Product() {
     const [priceSizeM, setPriceSizeM] = useState('');
     const [priceSizeG, setPriceSizeG] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const route = useRoute();
+    const navigation = useNavigation();
+    const { id } = route.params as ProductNavigationProps;
     async function handlePickerImage() {
         const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
         if (status === 'granted') {
@@ -81,29 +99,71 @@ export function Product() {
         })
             .then(() => {
                 Alert.alert('Cadastro', 'Produto cadastrado com sucesso');
+                navigation.navigate('Home');
             })
             .catch(() => {
+                setIsLoading(false);
                 Alert.alert('Cadastro', 'Erro ao cadastrar produto. Tente Novamente!');
             })
-        setIsLoading(false);
     }
+    function handleGoBack() {
+        navigation.goBack();
+    }
+    function handleDelete() {
+        firebase.firestore.collection('pizzas')
+            .doc(id)
+            .delete()
+            .then(() => {
+                firebase.storage.ref(photo_path)
+                    .delete()
+                    .then(() => {
+                        Alert.alert('Exclusão', 'Produto excluído com sucesso');
+                        navigation.navigate('Home');
+                    });
+            });
+    }
+    useEffect(() => {
+        if (id) {
+            firebase.firestore.collection('pizzas')
+                .doc(id)
+                .get()
+                .then(response => {
+                    const product = response.data() as PizzaResponse;
+                    setName(product.name);
+                    setImage(product.photo_url);
+                    setDescription(product.description);
+                    setPriceSizeP(product.priceSizes.p);
+                    setPriceSizeM(product.priceSizes.m);
+                    setPriceSizeG(product.priceSizes.g);
+                    setPhotoPath(product.photo_path)
+                })
+        }
+    }, [id])
     return (
         <Container behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
             <Header>
-                <ButtonBack />
+                <ButtonBack onPress={handleGoBack} />
                 <Title>
                     Cadastrar
                 </Title>
-                <TouchableOpacity>
-                    <DeleteLabel>
-                        Deletar
-                    </DeleteLabel>
-                </TouchableOpacity>
+                {
+                    id ?
+                        <TouchableOpacity onPress={handleDelete}>
+                            <DeleteLabel>
+                                Deletar
+                            </DeleteLabel>
+                        </TouchableOpacity>
+                        :
+                        <View style={{ width: 20 }} />
+                }
             </Header>
             <ScrollView showsVerticalScrollIndicator={false}>
                 <Upload>
                     <Photo uri={image} />
-                    <PickImageButton title="Carregar" type="secondary" onPress={handlePickerImage} />
+                    {
+                        !id &&
+                        <PickImageButton title="Carregar" type="secondary" onPress={handlePickerImage} />
+                    }
                 </Upload>
                 <Form>
                     <InputGroup>
@@ -118,7 +178,7 @@ export function Product() {
                                 Descrição
                             </Label>
                             <MaxCharacters>
-                                (0 de 60 caracteres)
+                                ({description.length} de 60 caracteres)
                             </MaxCharacters>
                         </InputGroupHeader>
                         <Input multiline maxLength={60} style={{ height: 80 }} onChangeText={setDescription} value={description} />
@@ -131,7 +191,10 @@ export function Product() {
                         <InputPrice size="M" onChangeText={setPriceSizeM} value={priceSizeM} />
                         <InputPrice size="G" onChangeText={setPriceSizeG} value={priceSizeG} />
                     </InputGroup>
-                    <Button title='Cadastrar pizza' isLoading={isLoading} onPress={handleAdd} />
+                    {
+                        !id &&
+                        <Button title='Cadastrar Pizza' isLoading={isLoading} onPress={handleAdd} />
+                    }
                 </Form>
             </ScrollView>
         </Container>
